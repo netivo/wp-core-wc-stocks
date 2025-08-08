@@ -43,9 +43,11 @@ class Module {
 		return null;
 	}
 
-	public function __construct() {
+	protected function __construct() {
 		$this->init_config();
+	}
 
+	public function init(): void {
 		new Stocks();
 
 		if ( is_admin() ) {
