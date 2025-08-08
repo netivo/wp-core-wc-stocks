@@ -1,0 +1,65 @@
+<?php
+/**
+ * Created by Netivo for alchi
+ * User: manveru
+ * Date: 5.08.2025
+ * Time: 12:21
+ *
+ * @var $product_object WC_Product
+ * @var $config array
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
+	exit;
+}
+
+wp_nonce_field( 'save_ex_stock_quantity', 'ex_stock_quantity_nonce' );
+
+if ( ! empty( $config ) ) {
+	foreach ( $config as $id => $stk ) {
+		if ( ! empty( $stk['manage'] ) ) {
+			$meta_key      = '_ex_stock_' . $id;
+			$meta_key_sync = '_ex_sync_' . $id;
+			$meta_key_rt   = '_ex_time_' . $id;
+			woocommerce_wp_text_input(
+				array(
+					'id'                => $meta_key,
+					'value'             => wc_stock_amount( $product_object->get_meta( $meta_key ) ),
+					'label'             => sprintf( __( 'Stan magazynowy %s', 'netivo' ), $stk['name'] ),
+					'desc_tip'          => true,
+					'description'       => sprintf( __( 'Opcja pozwala na kontrolę stanu magazynowego z magazynu %s', 'netivo' ), $stk['name'] ),
+					'type'              => 'number',
+					'custom_attributes' => array(
+						'step' => 'any',
+					),
+					'data_type'         => 'stock',
+				)
+			);
+
+			if ( ! empty( $stk['synchronize'] ) ) {
+				woocommerce_wp_checkbox(
+					array(
+						'id'      => $meta_key_sync,
+						'value'   => $product_object->get_meta( $meta_key_sync ),
+						'cbvalue' => 1,
+						'label'   => sprintf( __( 'Synchronizuj stan magazynowy %s', 'netivo' ), $stk['name'] ),
+					)
+				);
+			}
+			if ( ! empty( $stk['realisation_time'] ) ) {
+				woocommerce_wp_text_input(
+					array(
+						'id'          => $meta_key_rt,
+						'value'       => $product_object->get_meta( $meta_key_rt ),
+						'label'       => sprintf( __( 'Czas realizacji z magazynu %s (dni)', 'netivo' ), $stk['name'] ),
+						'placeholder' => wc_format_localized_decimal( 0 ),
+						'desc_tip'    => true,
+						'description' => sprintf( __( 'Czas realizacji z magazynu %s w dniach', 'netivo' ), $stk['name'] ),
+						'type'        => 'text',
+						'data_type'   => 'decimal',
+					)
+				);
+			}
+		}
+	}
+}
