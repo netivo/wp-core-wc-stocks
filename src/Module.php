@@ -23,11 +23,11 @@ class Module {
 	protected array $config = array();
 
 	public static function get_instance(): self {
-		if ( empty( $instance ) ) {
-			$instance = new self();
+		if ( empty( self::$instance ) ) {
+			self::$instance = new self();
 		}
 
-		return $instance;
+		return self::$instance;
 	}
 
 	public static function get_config_array(): array {
