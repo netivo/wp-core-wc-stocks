@@ -9,6 +9,8 @@
 
 namespace Netivo\Module\WooCommerce\Stocks;
 
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	exit;
@@ -18,6 +20,9 @@ class Stocks {
 
 	public function __construct() {
 		$this->init_actions();
+		if ( FeaturesUtil::feature_is_enabled( 'product_block_editor' ) ) {
+			new BlockEditor();
+		}
 	}
 
 	protected function init_actions(): void {

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "netivo/stocks",
+  "title": "External Stock",
+  "attributes": {
+    "stock_name": {
+      "type": "string",
+      "default": ""
+    }
+  }
+}
