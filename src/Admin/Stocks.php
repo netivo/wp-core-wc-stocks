@@ -33,9 +33,9 @@ class Stocks {
 	public function display_stock_quantity_options(): void {
 		global $post, $thepostid, $product_object;
 
-		$config = Module::get_config_array();
+		$config = Module::get_config_stocks();
 
-		$filename = Module::get_file_path() . '/admin/product/stock-quantity.phtml';
+		$filename = Module::get_module_path() . '/views/admin/product/stock-quantity.phtml';
 
 		include $filename; //phpcs:ignore
 	}
@@ -59,7 +59,7 @@ class Stocks {
 			return $post_id;
 		}
 
-		foreach ( Module::get_config_array() as $id => $stk ) {
+		foreach ( Module::get_config_stocks() as $id => $stk ) {
 			$meta_key      = '_ex_stock_' . $id;
 			$meta_key_sync = '_ex_sync_' . $id;
 			$meta_key_rt   = '_ex_time_' . $id;
