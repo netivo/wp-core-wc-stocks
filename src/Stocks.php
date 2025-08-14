@@ -33,7 +33,7 @@ class Stocks {
 
 			$final_stock = $stock;
 
-			foreach ( Module::get_config_array() as $id => $stk ) {
+			foreach ( Module::get_config_stocks() as $id => $stk ) {
 				if ( ! empty( $stk['manage'] ) ) {
 					$ex_stock = $product->get_meta( '_ex_stock_' . $id, true );
 					$ex_stock = wc_stock_amount( $ex_stock );
@@ -53,7 +53,7 @@ class Stocks {
 
 		$final_stock = $stock;
 
-		foreach ( Module::get_config_array() as $id => $stk ) {
+		foreach ( Module::get_config_stocks() as $id => $stk ) {
 			if ( ! empty( $stk['manage'] ) ) {
 				$ex_stock = $product->get_meta( '_ex_stock_' . $id, true );
 				$ex_stock = wc_stock_amount( $ex_stock );

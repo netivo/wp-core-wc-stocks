@@ -34,8 +34,23 @@ class Module {
 		return self::get_instance()->get_config();
 	}
 
-	public static function get_file_path(): false|string|null {
-		$file = realpath( __DIR__ . '/../views/' );
+	public static function get_config_stocks(): array {
+		$conf = self::get_instance()->get_config();
+		if ( ! empty( $conf['stocks'] ) ) {
+			return $conf['stocks'];
+		}
+
+		return [];
+	}
+
+	public static function is_realisation_time_enabled(): bool {
+		$conf = self::get_instance()->get_config();
+
+		return ( ! empty( $conf['realisation_time'] ) );
+	}
+
+	public static function get_module_path(): false|string|null {
+		$file = realpath( __DIR__ . '/../' );
 		if ( file_exists( $file ) ) {
 			return $file;
 		}
