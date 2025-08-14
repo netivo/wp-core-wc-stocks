@@ -63,3 +63,18 @@ if ( ! empty( $config ) ) {
 		}
 	}
 }
+
+if ( \Netivo\Module\WooCommerce\Stocks\Module::is_realisation_time_enabled() ) {
+	woocommerce_wp_text_input(
+		array(
+			'id'          => '_realisation_time',
+			'value'       => $product_object->get_meta( '_realisation_time' ),
+			'label'       => __( 'Czas realizacji (brak w magazynach)', 'netivo' ),
+			'placeholder' => wc_format_localized_decimal( 0 ),
+			'desc_tip'    => true,
+			'description' => __( 'Czas realizacji przy braku w magazynach w dniach', 'netivo' ),
+			'type'        => 'text',
+			'data_type'   => 'decimal',
+		)
+	);
+}

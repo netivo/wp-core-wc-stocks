@@ -24,6 +24,7 @@ class Stocks {
 		if ( ! empty( Module::get_config_array() ) ) {
 			add_filter( 'woocommerce_product_get_stock_quantity', [ $this, 'product_get_stock' ], 10, 2 );
 			add_filter( 'woocommerce_product_get_stock_status', [ $this, 'product_get_stock_status' ], 10, 2 );
+			add_filter( 'woocommerce_hold_stock_for_checkout', '__return_false', 10, 2 );
 		}
 	}
 
@@ -33,7 +34,7 @@ class Stocks {
 
 			$final_stock = $stock;
 
-			foreach ( Module::get_config_array() as $id => $stk ) {
+			foreach ( Module::get_config_stocks() as $id => $stk ) {
 				if ( ! empty( $stk['manage'] ) ) {
 					$ex_stock = $product->get_meta( '_ex_stock_' . $id, true );
 					$ex_stock = wc_stock_amount( $ex_stock );
@@ -53,7 +54,7 @@ class Stocks {
 
 		$final_stock = $stock;
 
-		foreach ( Module::get_config_array() as $id => $stk ) {
+		foreach ( Module::get_config_stocks() as $id => $stk ) {
 			if ( ! empty( $stk['manage'] ) ) {
 				$ex_stock = $product->get_meta( '_ex_stock_' . $id, true );
 				$ex_stock = wc_stock_amount( $ex_stock );
