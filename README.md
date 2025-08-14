@@ -10,11 +10,14 @@ Which must return array with structure:
 
 ```php  
 return array(
-    '[stock_id]' => array (
-        'name' => [stock name],
-        'manage'           => true | false, // enable stock management
-        'synchronize'      => true | false, // is there a synchronization for stock
-        'realisation_time' => true | false // can user specify custom realisation time for stock
+    'realisation_time' => true | false, // enable realisation times for products and orders
+    'stocks' => array(
+        '[stock_id]' => array (
+            'name' => [stock name],
+            'manage'           => true | false, // enable stock management
+            'synchronize'      => true | false, // is there a synchronization for stock
+            'realisation_time' => true | false // can user specify custom realisation time for stock
+        )
     )
 );
 ```
