@@ -38,8 +38,8 @@ class Order {
 				$product = $item->get_product();
 				$lqty    = $item->get_quantity();
 
-				$realisation_time = Product::get_realisation_time( $product, 'date', $lqty );
-				if ( ! empty( $r_time ) ) {
+				$realisation_time = Product::get_realisation_time( $product, $lqty, 'date' );
+				if ( ! empty( $realisation_time ) ) {
 					$item->update_meta_data( '_realisation_time', $realisation_time->format( 'Y-m-d' ) );
 
 					if ( $time !== null && $time < $realisation_time ) {
@@ -69,7 +69,7 @@ class Order {
 
 			$lqty = $cart_item['quantity'];
 
-			$r_time = Product::get_realisation_time( $_product, 'days', $lqty );
+			$r_time = Product::get_realisation_time( $_product, $lqty, 'days' );
 
 			if ( ! empty( $r_time ) ) {
 				$times[] = (int) $r_time;
