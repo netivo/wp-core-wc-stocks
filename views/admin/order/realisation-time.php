@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 woocommerce_wp_text_input(
 	array(
-		'id'    => '_realisation_tim',
+		'id'    => '_realisation_time',
 		'value' => $order->get_meta( '_realisation_time' ),
 		'label' => __( 'Termin realizacji', 'netivo' ),
-		'type'  => 'text',
+		'type'  => 'date',
 	)
 );
