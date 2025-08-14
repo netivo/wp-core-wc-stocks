@@ -65,6 +65,10 @@ class Module {
 	public function init(): void {
 		new Stocks();
 
+		if ( self::is_realisation_time_enabled() ) {
+			new Order();
+		}
+
 		if ( is_admin() ) {
 			new AdminStocks();
 		}
