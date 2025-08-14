@@ -209,6 +209,14 @@ class Product {
 			'time'  => $realisation_time,
 		];
 
+		$prev = 0;
+		foreach ( $result as $key => &$res ) {
+			if ( $key !== 'backorder' ) {
+				$prev         += $res['stock'];
+				$res['stock'] = $prev;
+			}
+		}
+
 		self::$cache[ $product->get_id() ] = $result;
 
 		return $result;

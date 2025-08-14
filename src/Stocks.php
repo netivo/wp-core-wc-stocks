@@ -24,6 +24,7 @@ class Stocks {
 		if ( ! empty( Module::get_config_array() ) ) {
 			add_filter( 'woocommerce_product_get_stock_quantity', [ $this, 'product_get_stock' ], 10, 2 );
 			add_filter( 'woocommerce_product_get_stock_status', [ $this, 'product_get_stock_status' ], 10, 2 );
+			add_filter( 'woocommerce_hold_stock_for_checkout', '__return_false', 10, 2 );
 		}
 	}
 

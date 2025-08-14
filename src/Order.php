@@ -9,6 +9,8 @@
 
 namespace Netivo\Module\WooCommerce\Stocks;
 
+use Netivo\Module\WooCommerce\Stocks\Admin\Order as AdminOrder;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	exit;
@@ -21,6 +23,10 @@ class Order {
 		add_action( 'woocommerce_review_order_before_shipping', [ $this, 'show_realisation_time_on_review' ], 10, 1 );
 
 		add_filter( 'woocommerce_get_order_item_totals', [ $this, 'add_realisation_time_to_order_totals' ], 10, 2 );
+
+		if ( is_admin() ) {
+			new AdminOrder();
+		}
 	}
 
 	/**
@@ -38,8 +44,8 @@ class Order {
 				$product = $item->get_product();
 				$lqty    = $item->get_quantity();
 
-				$realisation_time = Product::get_realisation_time( $product, 'date', $lqty );
-				if ( ! empty( $r_time ) ) {
+				$realisation_time = Product::get_realisation_time( $product, $lqty, 'date' );
+				if ( ! empty( $realisation_time ) ) {
 					$item->update_meta_data( '_realisation_time', $realisation_time->format( 'Y-m-d' ) );
 
 					if ( $time !== null && $time < $realisation_time ) {
@@ -69,7 +75,7 @@ class Order {
 
 			$lqty = $cart_item['quantity'];
 
-			$r_time = Product::get_realisation_time( $_product, 'days', $lqty );
+			$r_time = Product::get_realisation_time( $_product, $lqty, 'days' );
 
 			if ( ! empty( $r_time ) ) {
 				$times[] = (int) $r_time;
