@@ -16,16 +16,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Product
+ *
+ * Provides functionality for calculating and retrieving product realization times
+ * based on stock levels and other configurable parameters.
+ */
 class Product {
 
 	protected static array $cache = array();
 
 	/**
-	 * @param WC_Product $product
-	 * @param int $qty
-	 * @param string $type
+	 * Retrieves the realization time for a product based on quantity and output type.
 	 *
-	 * @return array|\DateTime|mixed|string|null
+	 * @param WC_Product $product The WooCommerce product for which the realization time is calculated.
+	 * @param int $qty The quantity of the product considered for the realization time (default is 1).
+	 * @param string $type The type of data to return. Allowed values are 'text', 'array', 'array_reversed', 'date', or the default type.
+	 *
+	 * @return mixed Returns the realization time based on the specified type. Can return a string (for 'text' or 'date'),
+	 *               an array (for 'array' or 'array_reversed'), or a numeric value in other cases.
 	 * @throws \DateMalformedIntervalStringException
 	 */
 	public static function get_realisation_time( WC_Product $product, int $qty = 1, string $type = 'text' ): mixed {
@@ -68,9 +77,12 @@ class Product {
 	}
 
 	/**
-	 * @param $r_time
+	 * Converts a realisation time value into a human-readable format.
 	 *
-	 * @return string
+	 * @param int|null $r_time The realisation time in days. If null, a default value of 200 is used.
+	 *                          The value 999 is treated as 0. The time ranges are converted to a string description.
+	 *
+	 * @return string Returns a formatted string description of the realisation time, such as "24h!" or "1-3 dni".
 	 */
 	public static function get_readable_realisation_time( $r_time = null ): string {
 		if ( $r_time == 999 ) {
@@ -113,9 +125,11 @@ class Product {
 	}
 
 	/**
-	 * @param int|null $time
+	 * Calculates the realisation date based on the given time in days.
 	 *
-	 * @return \DateTime|null
+	 * @param int|null $time The number of days to calculate the realisation date. If $time is 999, returns null.
+	 *
+	 * @return \DateTime|null Returns a \DateTime object representing the calculated realisation date, or null if $time is 999 or not provided.
 	 * @throws \DateMalformedIntervalStringException
 	 */
 	public static function get_realisation_time_date( ?int $time ): ?\DateTime {
@@ -150,9 +164,17 @@ class Product {
 	}
 
 	/**
-	 * @param WC_Product $product
+	 * Calculates and returns an array representing realisation times and stock quantities for a given product.
 	 *
-	 * @return array
+	 * This method computes the available stock levels and corresponding realisation times
+	 * based on the product's own stock, external stock configuration, and other metadata.
+	 * It caches the computed data to improve performance for subsequent calls.
+	 *
+	 * @param WC_Product $product The WooCommerce product object for which to calculate realisation times.
+	 *
+	 * @return array An associative array where the keys are the realisation times and the values
+	 *               are arrays containing 'stock' and 'time'. Includes a 'backorder' entry for the default
+	 *               realisation time and stock.
 	 */
 	protected static function get_realisation_time_array( WC_Product $product ): array {
 		if ( ! empty( self::$cache[ $product->get_id() ] ) ) {

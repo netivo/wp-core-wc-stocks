@@ -10,12 +10,22 @@
 namespace Netivo\Module\WooCommerce\Stocks;
 
 use Netivo\Module\WooCommerce\Stocks\Admin\Order as AdminOrder;
+use WC_Order;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	exit;
 }
 
+/**
+ * Class Order
+ *
+ * Handles the calculation, display, and integration of product realisation times
+ * within WooCommerce orders and the checkout process.
+ *
+ * Methods include functionality to compute realisation times for products in orders,
+ * display them on the checkout page, and add the information to order metadata and totals.
+ */
 class Order {
 
 	public function __construct() {
@@ -31,8 +41,15 @@ class Order {
 	}
 
 	/**
-	 * @param \WC_Order $order
+	 * Calculates and adds the realisation time for an order based on its items.
 	 *
+	 * This method iterates through the items in the order, retrieves the realisation time for
+	 * each product, and updates the order and item metadata with the calculated date if applicable.
+	 * The overall realisation time is determined by the latest date among all items.
+	 *
+	 * @param WC_Order $order The WooCommerce order object to process.
+	 *
+	 * @return void
 	 * @throws \DateMalformedIntervalStringException
 	 */
 	public function add_order_realisation_time( \WC_Order $order ): void {
@@ -66,6 +83,11 @@ class Order {
 	}
 
 	/**
+	 * Displays the realisation time of products on the checkout review page.
+	 * The method computes the maximum realisation time for products in the cart
+	 * where available and includes the appropriate view template for display.
+	 *
+	 * @return void
 	 * @throws \DateMalformedIntervalStringException
 	 */
 	public function show_realisation_time_on_review(): void {
@@ -99,6 +121,14 @@ class Order {
 
 	}
 
+	/**
+	 * Adds the realisation time information to the order totals array if available.
+	 *
+	 * @param array $totals The array of order totals.
+	 * @param WC_Order $order The order object containing the metadata.
+	 *
+	 * @return array The modified order totals array including the realisation time, if applicable.
+	 */
 	public function add_realisation_time_to_order_totals( $totals, $order ): array {
 		$time       = $order->get_meta( '_realisation_time' );
 		$new_totals = array();
@@ -116,6 +146,15 @@ class Order {
 		return $new_totals;
 	}
 
+	/**
+	 * Adds the realisation time information to a specific order item if the feature is enabled.
+	 *
+	 * @param int $item_id The ID of the order item.
+	 * @param WC_Order_Item $item The order item object.
+	 * @param WC_Order $order The order object containing the item.
+	 *
+	 * @return void
+	 */
 	public function add_realisation_time_to_order_item( $item_id, $item, $order ): void {
 		if ( Module::is_realisation_time_line_enabled() ) {
 			$time = $item->get_meta( '_realisation_time' );

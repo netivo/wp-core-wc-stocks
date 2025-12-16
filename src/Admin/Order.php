@@ -19,15 +19,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
+/**
+ * Handles the addition and management of the "realisation time" functionality in WooCommerce orders.
+ *
+ * This class integrates custom meta boxes to display and save "realisation time" for WooCommerce orders,
+ * providing support for custom order tables if enabled.
+ */
 class Order {
 
+
+	/**
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		add_action( 'add_meta_boxes', [ $this, 'realisation_time_metabox' ] );
 		add_action( 'save_post', [ $this, 'save_realisation_time' ] );
 		add_action( 'woocommerce_process_shop_order_meta', [ $this, 'save_realisation_time' ] );
 	}
 
-	public function realisation_time_metabox() {
+
+	/**
+	 * Adds a custom meta box for order realisation time to the specified screen.
+	 *
+	 * @return void
+	 */
+	public function realisation_time_metabox(): void {
 		$screen = OrderUtil::custom_orders_table_usage_is_enabled() ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 		add_meta_box( 'nt-order-realisation-time', 'Termin realizacji', [
 			$this,
@@ -35,7 +53,14 @@ class Order {
 		], $screen, 'side', 'core' );
 	}
 
-	public function render_realisation_time( $post_or_order_object ) {
+	/**
+	 * Renders the realisation time information within an admin order view.
+	 *
+	 * @param WP_Post|WC_Order $post_or_order_object The current post object or WooCommerce order object.
+	 *
+	 * @return void
+	 */
+	public function render_realisation_time( $post_or_order_object ): void {
 		if ( $post_or_order_object instanceof WP_Post ) {
 			$order = wc_get_order( $post_or_order_object->ID );
 		} else {
@@ -52,7 +77,15 @@ class Order {
 		include $filename; //phpcs:ignore
 	}
 
-	public function save_realisation_time( $order_id ) {
+
+	/**
+	 * Saves the realisation time for a WooCommerce order.
+	 *
+	 * @param int $order_id The ID of the order being updated.
+	 *
+	 * @return int The ID of the order after processing.
+	 */
+	public function save_realisation_time( $order_id ): int {
 		if ( ! isset( $_POST['order_realisation_time_nonce'] ) ) {
 			return $order_id;
 		}

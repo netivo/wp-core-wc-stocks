@@ -18,18 +18,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Manages stock-related functionalities for WooCommerce products.
+ */
 class Stocks {
 
 	public function __construct() {
 		$this->init_admin_fields();
 	}
 
+	/**
+	 * Initializes the custom admin fields for WooCommerce products.
+	 *
+	 * @return void
+	 */
 	protected function init_admin_fields(): void {
 		add_action( 'woocommerce_product_options_stock_fields', [ $this, 'display_stock_quantity_options' ] );
 
 		add_action( 'save_post', [ $this, 'product_data_save' ] );
 	}
 
+	/**
+	 * Displays stock quantity options in the admin product interface.
+	 *
+	 * Includes the required template file for rendering stock quantity options based on the provided configuration.
+	 *
+	 * @return void
+	 */
 	public function display_stock_quantity_options(): void {
 		global $post, $thepostid, $product_object;
 
@@ -40,6 +55,16 @@ class Stocks {
 		include $filename; //phpcs:ignore
 	}
 
+	/**
+	 * Saves product stock data and associated meta fields for a given product.
+	 *
+	 * Validates the request, checks user permissions, and updates custom stock-related
+	 * meta fields based on the submitted data and configuration.
+	 *
+	 * @param string $post_id The ID of the product post being saved.
+	 *
+	 * @return string The post ID after processing the save operation.
+	 */
 	public function product_data_save( string $post_id ): string {
 		if ( ! isset( $_POST['ex_stock_quantity_nonce'] ) ) {
 			return $post_id;
