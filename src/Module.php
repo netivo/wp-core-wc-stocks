@@ -49,6 +49,12 @@ class Module {
 		return ( ! empty( $conf['realisation_time'] ) );
 	}
 
+	public static function is_realisation_time_line_enabled(): bool {
+		$conf = self::get_instance()->get_config();
+
+		return ( ! empty( $conf['realisation_time_line'] ) );
+	}
+
 	public static function get_module_path(): false|string|null {
 		$file = realpath( __DIR__ . '/../' );
 		if ( file_exists( $file ) ) {

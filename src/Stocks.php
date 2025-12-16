@@ -50,7 +50,7 @@ class Stocks {
 	}
 
 	public function product_get_stock_status( $value, $product ): string {
-		$stock = wc_stock_amount( $value );
+		$stock = wc_stock_amount( $product->get_stock_quantity( 'normal' ) );
 
 		$final_stock = $stock;
 

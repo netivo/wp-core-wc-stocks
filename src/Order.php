@@ -23,6 +23,7 @@ class Order {
 		add_action( 'woocommerce_review_order_before_shipping', [ $this, 'show_realisation_time_on_review' ], 10, 1 );
 
 		add_filter( 'woocommerce_get_order_item_totals', [ $this, 'add_realisation_time_to_order_totals' ], 10, 2 );
+		add_filter( 'woocommerce_order_item_meta_start', [ $this, 'add_realisation_time_to_order_item' ], 10, 3 );
 
 		if ( is_admin() ) {
 			new AdminOrder();
@@ -113,5 +114,14 @@ class Order {
 		}
 
 		return $new_totals;
+	}
+
+	public function add_realisation_time_to_order_item( $item_id, $item, $order ): void {
+		if ( Module::is_realisation_time_line_enabled() ) {
+			$time = $item->get_meta( '_realisation_time' );
+			if ( ! empty( $time ) ) {
+				echo wp_kses_post( '<p style="display: block;"><strong>' . __( 'Przewidywany termin realizacji:', 'netivo' ) . '</strong> ' . $time . '</p>' );
+			}
+		}
 	}
 }

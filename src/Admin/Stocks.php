@@ -76,6 +76,10 @@ class Stocks {
 			}
 		}
 
+		if ( Module::is_realisation_time_enabled() ) {
+			update_post_meta( $post_id, '_realisation_time', sanitize_text_field( $_POST['_realisation_time'] ) );
+		}
+
 		return $post_id;
 	}
 }
