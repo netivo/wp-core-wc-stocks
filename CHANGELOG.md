@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.1.1
+
+- Fixed a bug with stock status information
+- Added code documentation
+
 ## Version 1.1
 
 - Added option to get product realization time
