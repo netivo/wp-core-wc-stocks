@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.2
+
+- Fixed a bug with a stock method return type
+
 ## Version 1.1.1
 
 - Fixed a bug with stock status information

@@ -49,7 +49,7 @@ class Stocks {
 	 *
 	 * @return int The calculated total stock quantity of the product.
 	 */
-	public function product_get_stock( mixed $value, WC_Product $product ): int {
+	public function product_get_stock( mixed $value, WC_Product $product ): ?int {
 		if ( ( ! is_admin() || wp_doing_ajax() ) && ! wp_doing_cron() ) {
 			$stock = wc_stock_amount( $value );
 
