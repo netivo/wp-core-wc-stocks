@@ -91,34 +91,52 @@ class Product {
 		if ( empty( $r_time ) ) {
 			$r_time = 200;
 		}
+		$r_time_texts = [
+			1 => __( '24h!', 'netivo' ),
+			3 => __( '1-3 dni', 'netivo' ),
+			5 => __( '3-5 dni', 'netivo' ),
+			7 => __( 'ok. tygodnia', 'netivo' ),
+			14 => __( '1-2 tygodnie', 'netivo' ),
+			21 => __( '2-3 tygodnie', 'netivo' ),
+			28 => __( '3-4 tygodnie', 'netivo' ),
+			35 => __( '4-5 tygodni', 'netivo' ),
+			42 => __( '5-6 tygodni', 'netivo' ),
+			49 => __( '6-7 tygodni', 'netivo' ),
+			56 => __( '7-8 tygodni', 'netivo' ),
+			70 => __( 'dwa miesiące', 'netivo' ),
+			100 => __( 'trzy miesiące', 'netivo' ),
+			'default' => __( 'Na zamówienie', 'netivo' )
+		];
+
+		$r_time_texts = apply_filters( 'netivo/woocommerce/stocks/rtime_texts', $r_time_texts );
 		if ( $r_time == 1 ) {
-			$d_time = '24h!';
+			$d_time = $r_time_texts[1];
 		} elseif ( $r_time <= 3 ) {
-			$d_time = '1-3 dni';
+			$d_time = $r_time_texts[3];
 		} elseif ( $r_time <= 5 ) {
-			$d_time = '3-5 dni';
+			$d_time = $r_time_texts[5];
 		} elseif ( $r_time <= 7 ) {
-			$d_time = 'ok. tygodnia';
+			$d_time = $r_time_texts[7];
 		} elseif ( $r_time <= 14 ) {
-			$d_time = '1-2 tygodnie';
+			$d_time = $r_time_texts[14];
 		} elseif ( $r_time <= 21 ) {
-			$d_time = '2-3 tygodnie';
+			$d_time = $r_time_texts[21];
 		} elseif ( $r_time <= 28 ) {
-			$d_time = '3-4 tygodnie';
+			$d_time = $r_time_texts[28];
 		} elseif ( $r_time <= 35 ) {
-			$d_time = '4-5 tygodni';
+			$d_time = $r_time_texts[35];
 		} elseif ( $r_time <= 42 ) {
-			$d_time = '5-6 tygodni';
+			$d_time = $r_time_texts[42];
 		} elseif ( $r_time <= 49 ) {
-			$d_time = '6-7 tygodni';
+			$d_time = $r_time_texts[49];
 		} elseif ( $r_time <= 56 ) {
-			$d_time = '7-8 tygodni';
+			$d_time = $r_time_texts[56];
 		} elseif ( $r_time <= 70 ) {
-			$d_time = 'dwa miesiące';
+			$d_time = $r_time_texts[70];
 		} elseif ( $r_time <= 100 ) {
-			$d_time = 'trzy miesiące';
+			$d_time = $r_time_texts[100];
 		} else {
-			$d_time = 'Na zamówienie';
+			$d_time = $r_time_texts['default'];
 		}
 
 		return $d_time;
@@ -190,7 +208,7 @@ class Product {
 		if ( $own_stock > 0 ) {
 			$stocks['own'] = [
 				'stock' => floor( $own_stock / $stock_divider ),
-				'time'  => 1
+				'time'  => apply_filters( 'netivo/woocommerce/stocks/default_own_rtime', 1 )
 			];
 		}
 

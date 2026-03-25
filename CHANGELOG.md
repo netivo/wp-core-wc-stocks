@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.1.3
+
+- Added filter (netivo/woocommerce/stocks/rtime_texts) for modifying realization time texts
+- Added filter (netivo/woocommerce/stocks/default_own_rtime) for modifying default own realization time
+
 ## Version 1.1.2
 
 - Fixed a bug with a stock method return type
