@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.1.4
+
+- Added external stock fields to product variations
+- Added external stocks to variation stock quantity and stock status calculation
+- Fixed a bug where the stock synchronization checkbox could not be unchecked
+
 ## Version 1.1.3
 
 - Added filter (netivo/woocommerce/stocks/rtime_texts) for modifying realization time texts

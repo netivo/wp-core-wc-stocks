@@ -37,6 +37,8 @@ class Stocks {
 		if ( ! empty( Module::get_config_array() ) ) {
 			add_filter( 'woocommerce_product_get_stock_quantity', [ $this, 'product_get_stock' ], 10, 2 );
 			add_filter( 'woocommerce_product_get_stock_status', [ $this, 'product_get_stock_status' ], 10, 2 );
+			add_filter( 'woocommerce_product_variation_get_stock_quantity', [ $this, 'variation_get_stock' ], 10, 2 );
+			add_filter( 'woocommerce_product_variation_get_stock_status', [ $this, 'variation_get_stock_status' ], 10, 2 );
 			add_filter( 'woocommerce_hold_stock_for_checkout', '__return_false', 10, 2 );
 		}
 	}
@@ -95,5 +97,43 @@ class Stocks {
 		$out = ( $product->get_backorders() === 'no' ) ? 'outofstock' : 'onbackorder';
 
 		return ( $final_stock > 0 ) ? 'instock' : $out;
+	}
+
+	/**
+	 * Calculates the total stock quantity of a product variation, including additional configured stock sources.
+	 *
+	 * External stocks are applied only when the variation manages its own stock. Otherwise, the original value
+	 * (e.g. stock managed by the parent product) is returned unchanged.
+	 *
+	 * @param mixed $value The initial stock quantity or value to be evaluated.
+	 * @param WC_Product $product The variation object for which the total stock is being calculated.
+	 *
+	 * @return int|null The calculated total stock quantity of the variation.
+	 */
+	public function variation_get_stock( mixed $value, WC_Product $product ): ?int {
+		if ( true !== $product->get_manage_stock( 'edit' ) ) {
+			return $value;
+		}
+
+		return $this->product_get_stock( $value, $product );
+	}
+
+	/**
+	 * Determines the stock status of a product variation, including additional configured stock sources.
+	 *
+	 * External stocks are applied only when the variation manages its own stock. Otherwise, the original status
+	 * is returned unchanged.
+	 *
+	 * @param mixed $value The initial stock status to be processed.
+	 * @param WC_Product $product The variation object for which the stock status is being determined.
+	 *
+	 * @return string The stock status of the variation.
+	 */
+	public function variation_get_stock_status( mixed $value, WC_Product $product ): string {
+		if ( true !== $product->get_manage_stock( 'edit' ) ) {
+			return $value;
+		}
+
+		return $this->product_get_stock_status( $value, $product );
 	}
 }
